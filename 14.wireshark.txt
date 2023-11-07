@@ -10,6 +10,6 @@ c.	Write a DISPLAY filter expression to count all TCP packets (captured under it
 	tcp.flags.push==1 && ip.addr== pc ip address && ip.addr== 72.52.251.71
 
 d.	Count how many TCP packets you received from / sent to Facebook (other website), and how many of each were also HTTP packets.
--->	http && tcp && ip.addr== pc id address && ip.addr==72.52.251.71
+-->	http && tcp && ip.addr==72.52.251.71
 
 SSL  -  tcp.stream eq 34 && ssl	
