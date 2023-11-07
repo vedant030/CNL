@@ -1,52 +1,36 @@
 import java.io.*;
 import java.net.*;
 
-public class Server {
+public class tcpserver {
     public static void main(String[] args) {
-        int port = 12345; // Port to listen on
+        try {
+            // Step 1: Create a ServerSocket object and bind it to a port
+            ServerSocket serverSocket = new ServerSocket(12345);
 
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("Server is listening on port " + port);
+            System.out.println("Server is listening on port 12345...");
 
-            while (true) {
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("Client connected: " + clientSocket.getInetAddress());
+            // Step 2: Accept incoming client connections
+            Socket clientSocket = serverSocket.accept();
 
-                // Create an instance of Server and use it to create an instance of ClientHandler
-                Server server = new Server();
-                ClientHandler clientHandler = server.new ClientHandler(clientSocket);
-                new Thread(clientHandler).start();
-            }
+            System.out.println("Client connected: " + clientSocket.getInetAddress());
+
+            // Step 3: Create input and output streams for communication
+            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+
+            // Step 4: Read data from client and send response
+            String clientMessage = in.readLine();
+            System.out.println("Client says: " + clientMessage);
+
+            out.println("Server received: " + clientMessage);
+
+            // Step 5: Close streams and sockets
+            in.close();
+            out.close();
+            clientSocket.close();
+            serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    class ClientHandler implements Runnable {
-        private Socket clientSocket;
-        private PrintWriter out;
-        private BufferedReader in;
-
-        public ClientHandler(Socket socket) {
-            this.clientSocket = socket;
-        }
-
-        @Override
-        public void run() {
-            try {
-                out = new PrintWriter(clientSocket.getOutputStream(), true);
-                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                String message;
-
-                while ((message = in.readLine()) != null) {
-                    System.out.println("Client says: " + message);
-                    out.println("Server received: " + message);
-                }
-
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 }
