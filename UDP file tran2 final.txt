@@ -1,0 +1,23 @@
+{
+    public static void main(String args[])throws I0Exception
+        {
+        
+                byte b[]=new byte[3072];
+                String data;
+                DatagramSocket dsoc=new DatagramSocket (4130);
+                FileOutputStream f=new FileOutputStream(insert text file location);
+                FileWriter wr = new Filewriter(insert text file location);
+                while (true)
+               {
+                        DatagramPacket dp=new DatagramPacket (b,b.Length);
+                        dsoc. receive(dp);
+                        data = new String(dp.getData(),0,dp.getLength()); wr.write(data); 
+                wr.flush();
+                System.out.println("File sent Successfully");
+                break;
+            
+                }
+                dsoc.close();
+            
+        }
+}
